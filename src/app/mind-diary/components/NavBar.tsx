@@ -3,7 +3,8 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
-
+import { GiHamburgerMenu } from "react-icons/gi";
+import SideMenu from "./SideMenu";
 const NAV_ITEM = [
   {
     name: "달력",
@@ -12,15 +13,18 @@ const NAV_ITEM = [
 ];
 
 export default function NavBar() {
+  const [isModalActive, setIsModalActive] = useState(false);
   const pathName = usePathname();
   const isActiveMenu = (link: string) => {
     if (pathName.includes("/main/point") && link === "/main/point/group")
       return true;
     return pathName === link;
   };
-
+  const toggleModal = () => {
+    setIsModalActive(!isModalActive);
+  };
   return (
-    <div className="flex items-center justify-around w-full h-12 bg-slate-500">
+    <NavBarContainer>
       {NAV_ITEM.map((item) => {
         return (
           <NavItem key={item.name} $active={isActiveMenu(item.link)}>
@@ -34,13 +38,21 @@ export default function NavBar() {
           </NavItem>
         );
       })}
-    </div>
+      <GiHamburgerMenu className="cursor-pointer" onClick={toggleModal} />
+      <SideMenu isActive={isModalActive} toggleModal={toggleModal} />
+    </NavBarContainer>
   );
 }
 
 interface navItemProp {
   $active: boolean;
 }
+const NavBarContainer = tw.div`
+  w-full h-12 
+  px-4
+  flex items-center justify-around
+  bg-slate-500
+`;
 
 const NavItem = tw.button<navItemProp>`
   nav_item
