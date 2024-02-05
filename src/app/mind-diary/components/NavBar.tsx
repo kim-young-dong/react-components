@@ -10,6 +10,22 @@ const NAV_ITEM = [
     name: "달력",
     link: "calendar",
   },
+  {
+    name: "달력",
+    link: "calendar",
+  },
+  {
+    name: "달력",
+    link: "calendar",
+  },
+  {
+    name: "달력",
+    link: "calendar",
+  },
+  {
+    name: "달력",
+    link: "calendar",
+  },
 ];
 
 export default function NavBar() {
