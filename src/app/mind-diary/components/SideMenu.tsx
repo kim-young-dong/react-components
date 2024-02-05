@@ -71,7 +71,7 @@ const SideMenuContainer = tw.div`
   side_menu
   ${({ $isActive }: { $isActive: boolean }) =>
     $isActive ? `opacity-100` : `opacity-0 pointer-events-none`}
-  w-full h-full z-50
+  w-full h-full z-50 overflow-hidden
   flex justify-end items-center
   absolute top-0 left-0
   text-black
@@ -83,6 +83,7 @@ const SideMenuContent = tw.div`
     $isActive ? `translate-x-0` : `translate-x-full`}
   w-1/3 h-full p-2 z-50
   flex flex-col items-center 
+  absolute top-0 right-0 
   bg-white
   transition-all duration-300
 `;

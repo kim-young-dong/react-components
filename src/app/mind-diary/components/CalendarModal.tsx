@@ -165,10 +165,12 @@ export default function CalendarModal({
 const CalendarModalContainer = tw.div`
   calendar_modal_container
   ${({ $isActive }: { $isActive: boolean }) =>
-    $isActive ? `flex items-center justify-center z-20` : `hidden`}
+    $isActive ? `opacity-100` : `opacity-0 pointer-events-none`}
   w-full h-full
+  flex items-center justify-center z-20
   absolute top-0 left-0
   text-black
+  transition-all duration-300
 `;
 const CalendarModalContent = tw.div`
   calendar_modal_content
