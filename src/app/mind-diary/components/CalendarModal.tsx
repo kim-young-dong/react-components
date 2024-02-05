@@ -40,7 +40,7 @@ export default function CalendarModal({
       <CalendarCell
         $checkedDays={checkedDays.includes(day)}
         $currentMonth={type === 1}
-        key={day}
+        key={`${type}-${day}`}
         onClick={(e) => {
           if (type !== 1) return;
           const target = e.target as HTMLDivElement;
@@ -87,13 +87,6 @@ export default function CalendarModal({
     }
 
     return matrix;
-  };
-  const isCurrentDate = (day: number) => {
-    return (
-      currentDate.getFullYear() === year &&
-      currentDate.getMonth() === month &&
-      currentDate.getDate() === day
-    );
   };
 
   const prevMonth = () => {
@@ -143,7 +136,7 @@ export default function CalendarModal({
               </span>
             </button>
           </div>
-          <div className="flex border-[] justify-around items-center w-full text-xs text-red-300 border-b-2">
+          <div className="flex justify-around items-center w-full text-xs text-red-300 border-b-2">
             {dayOfWeek.map((item, index) => {
               return (
                 <div key={index} className="text-center py-4">
