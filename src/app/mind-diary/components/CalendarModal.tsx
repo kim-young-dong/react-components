@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
+import { useState } from "react";
 
 const monthText = [
   "January",
@@ -18,31 +18,46 @@ const monthText = [
 const dayOfWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
 export default function CalendarModal({
-  isActive,
-  currentDate,
+  isActive = false,
+  currentDate = new Date(),
+  checkedDays = [],
   onFullDateChange,
   toggleModal,
 }: {
   isActive: boolean;
   currentDate: Date;
+  checkedDays: number[];
   onFullDateChange: (year: number, month: number, date: number) => void;
   toggleModal: () => void;
 }) {
   const [date, setdate] = useState(currentDate); // [TODO] 현재 날짜로 초기화
+
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate();
-
+  const calendarCellFactory = (type: number, day: number) => {
+    return (
+      <CalendarCell
+        $checkedDays={checkedDays.includes(day)}
+        $currentMonth={type === 1}
+        key={day}
+        onClick={(e) => {
+          if (type !== 1) return;
+          const target = e.target as HTMLDivElement;
+          onFullDateChange(year, month, Number(target.innerHTML));
+          toggleModal();
+        }}
+      >
+        {day}
+      </CalendarCell>
+    );
+  };
   const generateCalendarMatrix = () => {
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
     const startingDay = firstDayOfMonth.getDay();
     const weeksInMonth = Math.ceil((startingDay + lastDayOfMonth) / 7);
-    const lastDayOfPrevMonth = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      0
-    ).getDate();
+    const lastDayOfPrevMonth = new Date(year, month, 0).getDate();
     const matrix = [];
     let dayCounter = 1;
 
@@ -51,42 +66,19 @@ export default function CalendarModal({
       for (let j = 0; j < 7; j++) {
         if (i === 0 && j < startingDay) {
           // 이전 달의 날짜
-          const pervDay = (
-            <CalendarCell
-              key={lastDayOfMonth - startingDay + j + 1}
-              className="text-[#ccc7e1]"
-            >
-              {lastDayOfPrevMonth - startingDay + j + 1}
-            </CalendarCell>
+          const pervDay = calendarCellFactory(
+            0,
+            lastDayOfPrevMonth - startingDay + j + 1
           );
           week.push(pervDay);
         } else if (dayCounter > lastDayOfMonth) {
           // 다음 달의 날짜
-          const nextDay = (
-            <CalendarCell
-              key={dayCounter - lastDayOfMonth}
-              className="text-[#ccc7e1]"
-            >
-              {dayCounter - lastDayOfMonth}
-            </CalendarCell>
-          );
+          const nextDay = calendarCellFactory(2, dayCounter - lastDayOfMonth);
           week.push(nextDay);
           dayCounter++;
         } else {
           // 현재 달의 날짜
-          const day = (
-            <CalendarCell
-              $currentMonth={true}
-              key={dayCounter}
-              onClick={(e) => {
-                const target = e.target as HTMLDivElement;
-                onFullDateChange(year, month, Number(target.innerHTML));
-                toggleModal();
-              }}
-            >
-              {dayCounter}
-            </CalendarCell>
-          );
+          const day = calendarCellFactory(1, dayCounter);
           week.push(day);
           dayCounter++;
         }
@@ -114,7 +106,7 @@ export default function CalendarModal({
   return (
     <>
       <CalendarModalContainer $isActive={isActive}>
-        <Calendar>
+        <CalendarModalContent>
           <div className="flex justify-around items-center w-full">
             <button
               className="w-6 h-6 flex justify-center items-center"
@@ -127,7 +119,9 @@ export default function CalendarModal({
                   backgroundPositionY: "-70px",
                   backgroundSize: "390px",
                 }}
-              />
+              >
+                {"<"}
+              </span>
             </button>
             <div className="text-xl">
               <span className="font-bold">{monthText[date.getMonth()]}</span>{" "}
@@ -144,7 +138,9 @@ export default function CalendarModal({
                   backgroundPositionY: "-70px",
                   backgroundSize: "390px",
                 }}
-              />
+              >
+                {">"}
+              </span>
             </button>
           </div>
           <div className="flex border-[] justify-around items-center w-full text-xs text-red-300 border-b-2">
@@ -166,7 +162,7 @@ export default function CalendarModal({
               </div>
             ))}
           </div>
-        </Calendar>
+        </CalendarModalContent>
         <BackGround onClick={toggleModal} />
       </CalendarModalContainer>
     </>
@@ -181,11 +177,10 @@ const CalendarModalContainer = tw.div`
   absolute top-0 left-0
   text-black
 `;
-const Calendar = tw.div`
-  calendar
-  w-[50%] min-w-[260px] 
-  z-10 p-5 
-  bg-white rounded-xl
+const CalendarModalContent = tw.div`
+  calendar_modal_content
+  w-[80%] min-w-[260px] max-w-[400px] z-10 p-5 bg-white rounded-xl
+  flex flex-col gap-4
 `;
 const BackGround = tw.div`
   w-full h-full
@@ -194,16 +189,18 @@ const BackGround = tw.div`
 `;
 const CalendarCell = tw.button`
   ${({
-    $notCheckDays = true,
+    $checkedDays = true,
     $currentMonth = false,
   }: {
-    $notCheckDays?: boolean;
+    $checkedDays?: boolean;
     $currentMonth?: boolean;
-  }) =>
-    $notCheckDays
-      ? `${$currentMonth && "border-[1px] border-primary"}`
-      : `bg-primary text-white`}
+  }) => {
+    if (!$currentMonth) return `text-gray-300`;
+    if ($checkedDays) return `bg-primary text-white`;
+    return `border-[1px] border-primary`;
+  }}
+  calendar_cell
   w-8 h-full
-  flex-1  flex justify-center items-center
+  flex-1 flex justify-center items-center
   rounded-full
 `;
