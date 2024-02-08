@@ -44,7 +44,7 @@ export default function SideMenu({
             <div className="w-[100px] h-[100px] flex justify-center items-center rounded-full bg-[#efeeed]">
               <FaUser size={50} />
             </div>
-            <span className="text-lg">mark</span>
+            <span className="text-lg">userName</span>
           </div>
           <MenuList>
             {MENU_ITEMS.map((item) => {

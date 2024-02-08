@@ -32,8 +32,6 @@ export default function NavBar() {
   const [isModalActive, setIsModalActive] = useState(false);
   const pathName = usePathname();
   const isActiveMenu = (link: string) => {
-    if (pathName.includes("/main/point") && link === "/main/point/group")
-      return true;
     return pathName === link;
   };
   const toggleModal = () => {
