@@ -1,42 +1,25 @@
 "use client";
 import { useEffect, useState } from "react";
+import { debounce } from "lodash";
+import tw from "tailwind-styled-components";
 
-const useDebounce = (value: any, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(timer);
-    }; //value 변경 시점에 clearTimeout을 해줘야함.
-  }, [value, delay]);
-
-  return debouncedValue;
-};
-
-export default function Pagination({
-  maxPage,
-  currentPage = 1,
-}: {
-  maxPage: number;
-  currentPage: number;
-}) {
+export default function Pagination({ maxPage }: { maxPage: number }) {
   const [width, setWidth] = useState(window.innerWidth);
   const [paginationArray, setPaginationArray] = useState<any[]>([]);
-  const debouncedWidth = useDebounce(window.innerWidth, 200);
+  const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
-    const handleResize = () => {
-      setWidth(debouncedWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      // cleanup
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [debouncedWidth]);
+    if (typeof window !== "undefined") {
+      const handleResize = debounce(() => setWidth(window.innerWidth), 20);
+      window.addEventListener("resize", handleResize);
+    } else {
+      return () => {
+        // cleanup
+        window.removeEventListener("resize", () => {
+          return null;
+        });
+      };
+    }
+  }, []);
   useEffect(() => {
     let viewPage = Math.floor(Number(width) / 56);
     if (viewPage > 21) {
@@ -74,9 +57,30 @@ export default function Pagination({
     <div className="flex w-full items-center justify-center px-4">
       <div className="flex flex-col gap-2">
         <div className="flex flex-1 justify-center gap-2">
-          <button className="btn-square btn"></button>
+          {paginationArray.map((page, index) => {
+            return (
+              <BtnSquare
+                key={index}
+                $isActive={currentPage === page}
+                onClick={() => {
+                  page !== "..." && setCurrentPage(page);
+                }}
+              >
+                {page}
+              </BtnSquare>
+            );
+          })}
         </div>
       </div>
     </div>
   );
 }
+
+const BtnSquare = tw.button`
+  ${({ $isActive = false }: { $isActive?: boolean }) =>
+    $isActive ? `bg-blue-500 text-white	` : `hover:bg-blue-100`}
+  w-8 h-8
+  flex justify-center items-center
+  rounded-md
+  transition-all duration-300
+`;
