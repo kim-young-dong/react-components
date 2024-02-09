@@ -1,6 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { debounce } from "lodash";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
+import { RxDoubleArrowLeft } from "react-icons/rx";
+import { RxDoubleArrowRight } from "react-icons/rx";
 import tw from "tailwind-styled-components";
 
 export default function Pagination({ maxPage }: { maxPage: number }) {
@@ -57,9 +61,28 @@ export default function Pagination({ maxPage }: { maxPage: number }) {
     <div className="flex w-full items-center justify-center px-4">
       <div className="flex flex-col gap-2">
         <div className="flex flex-1 justify-center gap-2">
+          <ArrowBtn
+            onClick={() => {
+              if (currentPage < 10) {
+                setCurrentPage(1);
+                return;
+              }
+              setCurrentPage(currentPage - 10);
+            }}
+          >
+            <RxDoubleArrowLeft />
+          </ArrowBtn>
+          <ArrowBtn
+            onClick={() => {
+              if (currentPage === 1) return;
+              setCurrentPage(currentPage - 1);
+            }}
+          >
+            <IoIosArrowBack />
+          </ArrowBtn>
           {paginationArray.map((page, index) => {
             return (
-              <BtnSquare
+              <PageBtn
                 key={index}
                 $isActive={currentPage === page}
                 onClick={() => {
@@ -67,9 +90,30 @@ export default function Pagination({ maxPage }: { maxPage: number }) {
                 }}
               >
                 {page}
-              </BtnSquare>
+              </PageBtn>
             );
           })}
+          <>
+            <ArrowBtn
+              onClick={() => {
+                if (currentPage === maxPage) return;
+                setCurrentPage(currentPage + 1);
+              }}
+            >
+              <IoIosArrowForward />
+            </ArrowBtn>
+            <ArrowBtn
+              onClick={() => {
+                if (currentPage > maxPage - 10) {
+                  setCurrentPage(maxPage);
+                  return;
+                }
+                setCurrentPage(currentPage + 10);
+              }}
+            >
+              <RxDoubleArrowRight />
+            </ArrowBtn>
+          </>
         </div>
       </div>
     </div>
@@ -77,10 +121,16 @@ export default function Pagination({ maxPage }: { maxPage: number }) {
 }
 
 const BtnSquare = tw.button`
-  ${({ $isActive = false }: { $isActive?: boolean }) =>
-    $isActive ? `bg-blue-500 text-white	` : `hover:bg-blue-100`}
   w-8 h-8
   flex justify-center items-center
   rounded-md
   transition-all duration-300
+`;
+const PageBtn = tw(BtnSquare)`
+  ${({ $isActive = false }: { $isActive?: boolean }) =>
+    $isActive ? `bg-blue-500 text-white	` : `hover:bg-blue-100`}
+`;
+const ArrowBtn = tw(BtnSquare)`
+  bg-gray-200
+  hover:bg-gray-300
 `;
