@@ -16,12 +16,15 @@ export default function Card({
           <Image
             src={imgUrl || "https://via.placeholder.com/1000"}
             alt="card"
-            width={1000}
-            height={1000}
+            width={0}
+            height={0}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            style={{ width: "100%", height: "auto" }}
+            priority
           />
         </CardImage>
         <CardContent>
-          <h2>{title}</h2>
+          <h2 className=" font-semibold text-xl">{title}</h2>
           <div>{children}</div>
         </CardContent>
       </CardContainer>
@@ -42,9 +45,10 @@ const CardContainer = tw.div`
   card
   w-full min-w-[250px] min-h-[250px]
   flex flex-col items-center justify-center
-  rounded-2xl drop-shadow-md bg-white
+  rounded-2xl drop-shadow-md bg-white cursor-pointer
 `;
 const CardImage = tw.figure`
+  w-full 
   flex items-center justify-center
   relative overflow-hidden rounded-t-2xl
 `;
