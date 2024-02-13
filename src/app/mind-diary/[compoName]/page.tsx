@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import CalendarModal from "../components/CalendarModal";
 import tw from "tailwind-styled-components";
 
@@ -78,10 +79,20 @@ const DateSwiper = tw.div`
 `;
 
 export default function MindDiary() {
+  const { compoName } = useParams();
+  const contents = () => {
+    switch (compoName) {
+      case "calendar":
+        return <Calendar />;
+      default:
+        return <Calendar />;
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col justify-center items-center">
-        <Calendar />
+        {contents()}
       </div>
     </>
   );
