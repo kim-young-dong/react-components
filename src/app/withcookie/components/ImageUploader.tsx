@@ -53,7 +53,7 @@ export default function ImageUploader() {
                 width={0}
                 height={0}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                style={{ width: "100%", height: "auto" }}
+                style={{ width: "100%", height: "auto", objectFit: "contain" }}
               />
             )}
           </div>
