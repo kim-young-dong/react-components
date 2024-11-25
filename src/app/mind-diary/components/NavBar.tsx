@@ -43,7 +43,7 @@ export default function NavBar() {
     <NavBarContainer>
       <div className="menu-left flex-1 flex gap-4">
         <NavItem>
-          <Link href={"/mind-diary"}>
+          <Link href={"/"}>
             <IoHome size={28} color="white" />
           </Link>
         </NavItem>

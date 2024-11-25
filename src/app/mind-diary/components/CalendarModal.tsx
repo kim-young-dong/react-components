@@ -21,14 +21,15 @@ export default function CalendarModal({
   isActive = false,
   currentDate = new Date(),
   checkedDays = [],
-  onFullDateChange,
   toggleModal,
+  onSelectDate,
 }: {
   isActive: boolean;
   currentDate: Date;
   checkedDays: number[];
-  onFullDateChange: (year: number, month: number, date: number) => void;
+
   toggleModal: () => void;
+  onSelectDate: (e: any) => void;
 }) {
   const [date, setdate] = useState(currentDate); // [TODO] 현재 날짜로 초기화
 
@@ -41,12 +42,7 @@ export default function CalendarModal({
         $checkedDays={checkedDays.includes(day)}
         $currentMonth={type === 1}
         key={`${type}-${day}`}
-        onClick={(e) => {
-          if (type !== 1) return;
-          const target = e.target as HTMLDivElement;
-          onFullDateChange(year, month, Number(target.innerHTML));
-          toggleModal();
-        }}
+        onClick={onSelectDate}
       >
         {day}
       </CalendarCell>
