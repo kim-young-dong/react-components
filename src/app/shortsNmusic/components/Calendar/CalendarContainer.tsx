@@ -1,10 +1,16 @@
 import tw from "tailwind-styled-components";
-import styles from "./CalendarModal.module.css";
-import { useState, useRef, useEffect } from "react";
+import styles from "./CalendarStyle.module.css";
+import { useRef, useEffect } from "react";
 import CalendarBody from "./CalendarBody";
 import { CURRENT_YEAR } from "./Calendar.constant";
 
-export default function Calendar() {
+export default function CalendarContainer({
+  period,
+  setPeriod,
+}: {
+  period: { startDate: Date; endDate: Date };
+  setPeriod: (period: { startDate: Date; endDate: Date }) => void;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const YEAR_RANGE = 10;
   let years = [];
@@ -28,9 +34,7 @@ export default function Calendar() {
           return (
             <div key={idx} className={styles.calendar}>
               <div className={styles.calendar_header}>{year}년</div>
-              <div className={styles.calendar_body}>
-                <CalendarBody year={year} />
-              </div>
+              <CalendarBody year={year} period={period} setPeriod={setPeriod} />
             </div>
           );
         })}

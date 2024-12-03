@@ -1,6 +1,5 @@
 import tw from "tailwind-styled-components";
-import styles from "./CalendarModal.module.css";
-import React, { useRef } from "react";
+import styles from "./CalendarStyle.module.css";
 import classNames from "classnames";
 import { DAY_OF_WEEK } from "./Calendar.constant";
 import { set } from "lodash";
@@ -34,11 +33,13 @@ export default function CalendarMonth({
   month,
   period,
   setPeriod,
+  isStart,
 }: {
   year: number;
   month: number;
   period: { startDate: Date; endDate: Date };
   setPeriod: (period: { startDate: Date; endDate: Date }) => void;
+  isStart: { current: boolean };
 }) {
   const FIRST_DAY = new Date(year, month, 1);
   const LAST_DAY = new Date(year, month + 1, 0);
@@ -51,47 +52,29 @@ export default function CalendarMonth({
     if (day.isDisabled) return;
 
     if (day.day) {
-      const date = new Date(year, month, day.day);
+      const date = new Date(year, month, Number(day.day));
       const startDate = new Date(period.startDate);
       const endDate = new Date(period.endDate);
 
-      if (startDate > endDate) {
-        setPeriod({ startDate: date, endDate: date });
-      } else if (startDate.getTime() === endDate.getTime()) {
-        setPeriod({ startDate: date, endDate: date });
-      } else if (date < startDate) {
-        setPeriod({ startDate: date, endDate });
-      } else if (date > endDate) {
-        setPeriod({ startDate, endDate: date });
+      // handle click 이벤트 발생시마다 period의 startDate와 endDate를 번갈아가며 설정
+      if (isStart.current) {
+        if (date.getTime() > endDate.getTime()) {
+          setPeriod({ startDate: date, endDate: date });
+        } else {
+          setPeriod({ startDate: date, endDate });
+        }
+        isStart.current = false;
       } else {
-        setPeriod({ startDate, endDate: date });
+        if (date.getTime() < startDate.getTime()) {
+          isStart.current = false;
+          setPeriod({ startDate: date, endDate: date });
+        } else {
+          isStart.current = true;
+          setPeriod({ startDate, endDate: date });
+        }
       }
     }
   };
-
-  const renderDays = () => {
-    // Add empty days before the first day of the month
-    for (let i = 0; i < FIRST_DAY.getDay(); i++) {
-      days.push({ day: "", isEmpthy: true, isDisabled: false });
-    }
-    // Add days of the month
-    for (let i = 1; i <= LAST_DAY.getDate(); i++) {
-      if (IS_CURRENT_MONTH && i > new Date().getDate()) {
-        days.push({
-          day: i,
-          isEmpthy: false,
-          isDisabled: true,
-        });
-      } else {
-        days.push({
-          day: i,
-          isEmpthy: false,
-          isDisabled: false,
-        });
-      }
-    }
-  };
-  renderDays();
 
   const startOfDay = (date: Date) =>
     new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -134,9 +117,33 @@ export default function CalendarMonth({
     });
   };
 
+  const renderDays = () => {
+    // Add empty days before the first day of the month
+    for (let i = 0; i < FIRST_DAY.getDay(); i++) {
+      days.push({ day: "", isEmpthy: true, isDisabled: false });
+    }
+    // Add days of the month
+    for (let i = 1; i <= LAST_DAY.getDate(); i++) {
+      if (IS_CURRENT_MONTH && i > new Date().getDate()) {
+        days.push({
+          day: i,
+          isEmpthy: false,
+          isDisabled: true,
+        });
+      } else {
+        days.push({
+          day: i,
+          isEmpthy: false,
+          isDisabled: false,
+        });
+      }
+    }
+  };
+  renderDays();
+
   return (
     <>
-      <div className="month">
+      <div className={styles.month}>
         <CalendarHeader year={year} month={month} />
         <CalendarWeeks />
         <div className={styles.days}>
@@ -144,8 +151,6 @@ export default function CalendarMonth({
             return (
               <CalendarCell
                 key={idx}
-                // $checkedDays={day.day && day.isDisabled}
-                // $currentMonth={day.day}
                 className={dynamicStyles(day)}
                 onClick={(e) => handleClick(e, day)}
               >
