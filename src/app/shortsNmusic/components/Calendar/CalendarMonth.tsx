@@ -2,7 +2,6 @@ import tw from "tailwind-styled-components";
 import styles from "./CalendarStyle.module.css";
 import classNames from "classnames";
 import { DAY_OF_WEEK } from "./Calendar.constant";
-import { set } from "lodash";
 
 interface Day {
   day: number | string;

@@ -44,5 +44,6 @@ export default function CalendarContainer({
 }
 
 const Container = tw.div`
-  scrollable-calendar
+  scrollable-calendar absolute top-12  right-0 bottom-0
+  bg-white
 `;
