@@ -1,6 +1,6 @@
 "use client";
 import { useState, useMemo } from "react";
-import CalendarModal from "../components/Calendar/CalendarModal";
+import CalendarModal from "./CalendarModal";
 import tw from "tailwind-styled-components";
 
 export default function Calendar() {
@@ -35,7 +35,7 @@ export default function Calendar() {
         return [...prev, day];
       }
     });
-    // setCurrentDate(new Date(year, month, day));
+    setCurrentDate(new Date(year, month, day));
     // toggleModal(); // [TODO] 날짜 선택시 모달 닫기 (선택사항)
   };
   return (
@@ -70,13 +70,13 @@ export default function Calendar() {
       <CalendarModal
         year={year}
         month={month}
-        currentDate={currentDate}
-        preveMonth={preveMonth}
-        nextMonth={nextMonth}
         isActive={isModalActive}
+        currentDate={currentDate}
         selectedDays={selectedDays}
         onSelectDate={onSelectDate}
         toggleModal={toggleModal}
+        preveMonth={preveMonth}
+        nextMonth={nextMonth}
       />
     </>
   );
