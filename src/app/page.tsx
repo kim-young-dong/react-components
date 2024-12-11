@@ -21,10 +21,10 @@ const PAGES = [
     discription: "숏폼 제작자 음원 제공 서비스.",
   },
   {
-    title: "openLogo",
-    href: "/openLogo",
+    title: "template",
+    href: "/template",
     imgUrl: "/openLogo.png",
-    discription: "로고 제작 서비스.",
+    discription: "템플릿 프로젝트.",
   },
 ];
 
