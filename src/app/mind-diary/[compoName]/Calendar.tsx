@@ -30,7 +30,7 @@ export default function Calendar() {
   const onSelectDate = (year: number, month: number, day: number) => {
     setSelectedDays((prev) => {
       if (prev.includes(day)) {
-        return prev.filter((day) => day !== day);
+        return prev.filter((item) => item !== day);
       } else {
         return [...prev, day];
       }

@@ -33,12 +33,10 @@ const Cell = tw.button`
   }) => {
     if (!$currentMonth) return `text-gray-300`;
     if ($checkedDays) return `bg-primary text-white`;
-    return `border-[1px] border-primary`;
   }}
   calendar_cell
   w-8 h-full
   flex-1 flex justify-center items-center
-  rounded-full
 `;
 
 function CalendarHeader({
@@ -105,7 +103,7 @@ function CalendarBody({
         key={`${type}-${day}`}
         isCheckedDays={selectedDays.includes(day)}
         isCurrentMonth={type === 1}
-        onSelectDate={() => onSelectDate(year, month - 1, day)}
+        onSelectDate={() => type === 1 && onSelectDate(year, month - 1, day)}
       >
         {day}
       </CalendarCell>
