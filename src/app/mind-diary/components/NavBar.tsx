@@ -28,6 +28,20 @@ const NAV_ITEM = [
   //   link: "calendar",
   // },
 ];
+const MENU_ITEMS = [
+  {
+    title: "닉네임 설정",
+    path: "/main/setting/nickname",
+  },
+  {
+    title: "그룹관리",
+    path: "/main/setting/group",
+  },
+  {
+    title: "고객센터",
+    path: "/main/check",
+  },
+];
 
 export default function NavBar() {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -43,7 +57,7 @@ export default function NavBar() {
     <NavBarContainer>
       <div className="menu-left flex-1 flex gap-4">
         <NavItem>
-          <Link href={"/mind-diary"}>
+          <Link href={"/"}>
             <IoHome size={28} color="white" />
           </Link>
         </NavItem>
@@ -64,7 +78,11 @@ export default function NavBar() {
       <NavItem onClick={toggleModal}>
         <GiHamburgerMenu size={20} color="white" className="cursor-pointer" />
       </NavItem>
-      <SideMenu isActive={isModalActive} toggleModal={toggleModal} />
+      <SideMenu
+        menuList={MENU_ITEMS}
+        isActive={isModalActive}
+        toggleModal={toggleModal}
+      />
     </NavBarContainer>
   );
 }

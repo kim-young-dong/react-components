@@ -8,7 +8,7 @@ import { RxDoubleArrowRight } from "react-icons/rx";
 import tw from "tailwind-styled-components";
 
 export default function Pagination({ maxPage }: { maxPage: number }) {
-  const [width, setWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState(900);
   const [paginationArray, setPaginationArray] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {

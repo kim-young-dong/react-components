@@ -5,25 +5,12 @@ import { FaUser } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 
-const MENU_ITEMS = [
-  {
-    title: "닉네임 설정",
-    path: "/main/setting/nickname",
-  },
-  {
-    title: "그룹관리",
-    path: "/main/setting/group",
-  },
-  {
-    title: "고객센터",
-    path: "/main/check",
-  },
-];
-
 export default function SideMenu({
+  menuList,
   isActive,
   toggleModal,
 }: {
+  menuList: { title: string; path: string }[];
   isActive: boolean;
   toggleModal: () => void;
 }) {
@@ -35,19 +22,22 @@ export default function SideMenu({
     <>
       <SideMenuContainer $isActive={isActive}>
         <SideMenuContent $isActive={isActive}>
+          {/* close-btn */}
           <div className="w-full flex">
             <button className=" relative w-5 h-5" onClick={toggleModal}>
-              <IoClose />
+              <IoClose size={28} />
             </button>
           </div>
+          {/* user-profile */}
           <div className="w-full flex flex-col justify-center items-center">
             <div className="w-[100px] h-[100px] flex justify-center items-center rounded-full bg-[#efeeed]">
               <FaUser size={50} />
             </div>
             <span className="text-lg">userName</span>
           </div>
+          {/* menu-list */}
           <MenuList>
-            {MENU_ITEMS.map((item) => {
+            {menuList.map((item) => {
               return (
                 <MenuItem key={item.title}>
                   <span>{item.title}</span>
@@ -55,13 +45,15 @@ export default function SideMenu({
               );
             })}
             <RowDashBar />
+            {/* logout */}
             <MenuItem onClick={logout}>
               <CiLogout />
               <span>Log out</span>
             </MenuItem>
           </MenuList>
         </SideMenuContent>
-        <BackGround />
+        {/* background */}
+        <BackGround onClick={toggleModal} />
       </SideMenuContainer>
     </>
   );
