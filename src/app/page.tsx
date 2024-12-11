@@ -14,6 +14,18 @@ const PAGES = [
     imgUrl: "/withcookie.png",
     discription: "폐쇄형 쇼핑몰 리뉴얼 프로젝트.",
   },
+  {
+    title: "shortsNmusic",
+    href: "/shortsNmusic",
+    imgUrl: "/shortsNmusic.png",
+    discription: "숏폼 제작자 음원 제공 서비스.",
+  },
+  {
+    title: "openLogo",
+    href: "/openLogo",
+    imgUrl: "/openLogo.png",
+    discription: "로고 제작 서비스.",
+  },
 ];
 
 export default function Home() {
